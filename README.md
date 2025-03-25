@@ -1,17 +1,17 @@
 # Simple Todo App
 
-Give a brief description of the project here. Feel free to give it a different name.
+A simple To Do App with javascript validation.
 
 ## Functionality
 
-Give a more detailed explanation of the project and its functionality.
+Object oriented programming. Classes with private and public methods.
 
 ## Technology
 
-Give a description of the technologies and techniques used. Pictures, GIFs, or screenshots that detail the project features are recommended.
+Javascript, CSS, HTML.
 
 ## Deployment
 
 This project is deployed on GitHub Pages:
 
-- ADD LINK HERE
+- https://dathantowns.github.io/se_project_todo-app/
