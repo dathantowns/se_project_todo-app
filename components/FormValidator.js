@@ -3,47 +3,42 @@ class FormValidator {
     this._settings = settings;
     this._formElement = formElement;
   }
-  _showInputError(formElement, inputElement, errorMessage, settings) {
+  _showInputError(inputElement, errorMessage) {
     const errorElementId = `#${inputElement.id}-error`;
-    const errorElement = formElement.querySelector(errorElementId);
-    inputElement.classList.add(settings.inputErrorClass);
+    const errorElement = this._formElement.querySelector(errorElementId);
+    inputElement.classList.add(this._settings.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(settings.errorClass);
+    errorElement.classList.add(this._settings.errorClass);
   }
 
-  _hideInputError(formElement, inputElement, settings) {
+  _hideInputError(inputElement) {
     const errorElementId = `#${inputElement.id}-error`;
-    const errorElement = formElement.querySelector(errorElementId);
-    inputElement.classList.remove(settings.inputErrorClass);
-    errorElement.classList.remove(settings.errorClass);
+    const errorElement = this._formElement.querySelector(errorElementId);
+    inputElement.classList.remove(this._settings.inputErrorClass);
+    errorElement.classList.remove(this._settings.errorClass);
     errorElement.textContent = "";
   }
-  _checkInputValidity(formElement, inputElement, settings) {
+  _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
-      this._showInputError(
-        formElement,
-        inputElement,
-        inputElement.validationMessage,
-        settings
-      );
+      this._showInputError(inputElement, inputElement.validationMessage);
     } else {
-      this._hideInputError(formElement, inputElement, settings);
+      this._hideInputError(inputElement);
     }
   }
 
-  _hasInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
+  _hasInvalidInput() {
+    return this._inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     });
   }
 
-  _toggleButtonState(inputList, buttonElement, settings) {
-    if (this._hasInvalidInput(inputList)) {
-      buttonElement.classList.add(settings.inactiveButtonClass);
-      buttonElement.disabled = true;
+  _toggleButtonState() {
+    if (this._hasInvalidInput(this._inputList)) {
+      this._buttonElement.classList.add(this._settings.inactiveButtonClass);
+      this._buttonElement.disabled = true;
     } else {
-      buttonElement.classList.remove(settings.inactiveButtonClass);
-      buttonElement.disabled = false;
+      this._buttonElement.classList.remove(this._settings.inactiveButtonClass);
+      this._buttonElement.disabled = false;
     }
   }
 
@@ -51,35 +46,23 @@ class FormValidator {
     this._inputList.forEach((inputElement) => {
       inputElement.value = "";
     });
-    this._toggleButtonState(
-      this._inputList,
-      this._buttonElement,
-      this._settings
-    );
+    this._toggleButtonState();
   }
 
-  _setEventListeners(formElement, settings) {
+  _setEventListeners() {
     this._inputList = Array.from(
-      formElement.querySelectorAll(settings.inputSelector)
+      this._formElement.querySelectorAll(this._settings.inputSelector)
     );
-    this._buttonElement = formElement.querySelector(
-      settings.submitButtonSelector
+    this._buttonElement = this._formElement.querySelector(
+      this._settings.submitButtonSelector
     );
 
-    this._toggleButtonState(
-      this._inputList,
-      this._buttonElement,
-      this._settings
-    );
+    this._toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
-        this._checkInputValidity(formElement, inputElement, settings);
-        this._toggleButtonState(
-          this._inputList,
-          this._buttonElement,
-          this._settings
-        );
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState();
       });
     });
   }
@@ -88,7 +71,7 @@ class FormValidator {
     this._formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
-    this._setEventListeners(this._formElement, this._settings);
+    this._setEventListeners();
   }
 }
 
