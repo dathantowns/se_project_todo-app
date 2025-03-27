@@ -66,12 +66,20 @@ class FormValidator {
       settings.submitButtonSelector
     );
 
-    this._toggleButtonState(this._inputList, buttonElement, settings);
+    this._toggleButtonState(
+      this._inputList,
+      this._buttonElement,
+      this._settings
+    );
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(formElement, inputElement, settings);
-        this._toggleButtonState(this._inputList, buttonElement, settings);
+        this._toggleButtonState(
+          this._inputList,
+          this._buttonElement,
+          this._settings
+        );
       });
     });
   }
