@@ -3,7 +3,8 @@ import { initialTodos, validationConfig } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
 import FormValidator from "../components/FormValidator.js";
 import Section from "../utils/Section.js";
-import { Popup, PopupWithForm } from "../components/Popup.js";
+import Popup from "../components/Popup.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 import TodoCounter from "../components/TodoCounter.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
@@ -12,14 +13,6 @@ const addTodoForm = document.forms["add-todo-form"];
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todoTemplate = document.querySelector("#todo-template");
 const todosList = document.querySelector(".todos__list");
-
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-};
-
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-};
 
 function handleCheck(completed) {
   todoCounter.updateCompleted(completed);
@@ -49,30 +42,27 @@ const todosListSection = new Section({
 todosListSection.renderItems();
 
 addTodoButton.addEventListener("click", () => {
-  openModal(addTodoPopup);
+  todoPopup.open();
 });
 
 const validator = new FormValidator(validationConfig, addTodoForm);
 validator.enableValidation();
 
-const todoPopup = new PopupWithForm(
-  "#add-todo-popup",
-  (data) => {
-    const name = data.name;
-    const dateInput = data.date;
-    const id = uuidv4();
+const todoPopup = new PopupWithForm("#add-todo-popup", (data) => {
+  const name = data.name;
+  const dateInput = data.date;
+  const id = uuidv4();
 
-    const date = new Date(dateInput);
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  const date = new Date(dateInput);
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
-    const values = { name, date, id };
-    renderTodo(values);
-    validator.resetForm();
-    todoPopup.close();
-    todoCounter;
-  },
-  handleTotal
-);
+  const values = { name, date, id };
+  renderTodo(values);
+  validator.resetForm();
+  todoPopup.close();
+  todoCounter;
+  handleTotal(true);
+});
 todoPopup.setEventListeners();
 
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
