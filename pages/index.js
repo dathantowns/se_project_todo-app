@@ -60,7 +60,6 @@ const todoPopup = new PopupWithForm("#add-todo-popup", (data) => {
   renderTodo(values);
   validator.resetForm();
   todoPopup.close();
-  todoCounter;
   handleTotal(true);
 });
 todoPopup.setEventListeners();
